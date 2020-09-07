@@ -1,0 +1,16 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'com.google.protobuf', name: 'protobuf-java', version: '3.12.2'
+    compile group: 'io.netty', name: 'netty-all', version: '4.1.48.Final'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

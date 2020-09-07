@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+message Wrapper {
+  string tag = 1;
+  repeated Packet packets = 2;
+}
+
+message Packet {
+  int32 id = 1;
+  string name = 2;
+}
