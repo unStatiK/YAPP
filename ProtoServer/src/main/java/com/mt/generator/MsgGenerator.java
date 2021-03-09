@@ -1,14 +1,15 @@
 package com.mt.generator;
 
 import com.mt.model.Msg;
+import org.apache.commons.lang3.RandomStringUtils;
 
 public class MsgGenerator {
-    //todo: remove hardcode
+
     public static Msg.Wrapper generate() {
         return Msg.Wrapper.newBuilder()
-            .setTag("zer0")
-            .addPackets(buildPacket(99, "zero"))
-            .addPackets(buildPacket(678, "next"))
+            .setTag(String.format("Tag-%s", RandomStringUtils.randomNumeric(1)))
+            .addPackets(buildPacket(genId(), genName()))
+            .addPackets(buildPacket(genId(), genName()))
             .build();
     }
 
@@ -17,5 +18,14 @@ public class MsgGenerator {
             .setId(id)
             .setName(name)
             .build();
+    }
+
+    private static int genId() {
+        return Integer.parseInt(RandomStringUtils.randomNumeric(3));
+    }
+
+    private static String genName() {
+        int len = Integer.parseInt(RandomStringUtils.randomNumeric(1));
+        return RandomStringUtils.randomAlphabetic(len);
     }
 }
