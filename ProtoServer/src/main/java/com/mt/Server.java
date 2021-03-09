@@ -21,10 +21,11 @@ public class Server {
 
     public static void main(String[] args) throws Exception {
         if (args.length < 1) {
-            System.err.println("Usage: " + Server.class.getSimpleName() + " <port>");
+            System.err.println("Usage: <server> <port>");
+            return;
         }
-        int port = Integer.parseInt(args[0]);
-        String host = String.valueOf(args[1]);
+        String host = String.valueOf(args[0]);
+        int port = Integer.parseInt(args[1]);
         new Server(port, host).start();
     }
 
@@ -32,8 +33,8 @@ public class Server {
         final GeneralHandler serverHandler = new GeneralHandler();
         EventLoopGroup group = new NioEventLoopGroup();
         try {
-            ServerBootstrap b = new ServerBootstrap();
-            b.group(group)
+            ServerBootstrap bootstrap = new ServerBootstrap();
+            bootstrap.group(group)
                 .channel(NioServerSocketChannel.class)
                 .localAddress(new InetSocketAddress(host, port))
                 .childHandler(new ChannelInitializer<SocketChannel>() {
@@ -42,8 +43,9 @@ public class Server {
                         ch.pipeline().addLast(serverHandler);
                     }
                 });
-            ChannelFuture f = b.bind().sync();
-            f.channel().closeFuture().sync();
+            ChannelFuture channel = bootstrap.bind().sync()
+                .addListener(future -> System.out.println(String.format("Server start on %s:%s", host, port)));
+            channel.channel().closeFuture().sync();
         } finally {
             group.shutdownGracefully().sync();
         }
